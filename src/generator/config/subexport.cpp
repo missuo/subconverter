@@ -679,7 +679,11 @@ std::string proxyToSurge(std::vector<Proxy> &nodes, const std::string &base_conf
             case "tcp"_hash:
                 break;
             case "ws"_hash:
-                proxy += ", ws=true, ws-path=" + path + ", sni=" + host + ", ws-headers=Host:" + host;
+                // When Host is Empty, Remove sni and headers Parameter. (@missuo)
+                if(host.empty())
+                    proxy += ", ws=true, ws-path=" + path;
+                else
+                    proxy += ", ws=true, ws-path=" + path + ", sni=" + host + ", ws-headers=Host:" + host;
                 if(!edge.empty())
                     proxy += "|Edge:" + edge;
                 break;
